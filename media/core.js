@@ -18,26 +18,86 @@ function upload_complete(id, url) {
 }
 
 $(window).load(function(){
+    var wrapper = $('#mousepad');
+    var content = $('#cursor-touch');
 
-    buildThumbs($('#imagery-outer'));
-    
-    function buildThumbs($elem){
-        var $wrapper=$elem;
-        var $menu=$wrapper.find('#imagery-inner');
-        var inactiveMargin=700;
-        $wrapper.bind('mousemove1',function(e){
-            var wrapperWidth=$wrapper.width();
-            var menuWidth=$menu.width()+2*inactiveMargin;
-            var left=(e.pageX-$wrapper.offset().left)*(menuWidth-wrapperWidth)/wrapperWidth-inactiveMargin;
-            $wrapper.scrollLeft(left);
-        });}
-    
-    $('.cell').click(function(){
-        console.log('show');
-        $('.cell').removeClass('cell_show');
-        $(this).addClass('cell_show');
-        return false;
-    });
+    wrapper.bind('mouseenter mousemove', $.throttle(500, buildThumbs));
+
+    function buildThumbs(e) {
+        var wrapper_width = wrapper.outerWidth();
+		var content_width = content.outerWidth();
+		var inactiveMargin=50;
+        var left=(e.pageX-$('#mousepad').offset().left)*(content_width-wrapper_width)/wrapper_width-inactiveMargin;
+		content.stop().animate({'margin-left': '-'+left+'px'}, 500);
+		$('#imagery-outer').stop().animate({scrollLeft: left}, 500);
+    }
+$('#imagery-inner>div').mouseover(function(){$('#imagery-inner>div').css('z-index',1);$(this).css('z-index',10);$(this).find('.hovering').stop().animate({'opacity':1},400);});
+$('#imagery-inner>div').mouseleave(function(){$(this).css('z-index',1);$(this).find('.hovering').stop().animate({'opacity':0},200);});
+$('.upload').click(function(){$('.splasher').css('display','block').stop().animate({'opacity':0.75},400);$('#modal').css('display','block').stop().animate({'opacity':1},900)});
+$('.close').click(function(){$('#modal').animate({'opacity':0},{duration:400, complete:function(){$(this).css("display","none")}});$('.splasher').animate({'opacity':0},{duration:400, complete:function(){$(this).css("display","none")}});})
+
+        var fileInput = document.getElementById('File1');
+        var fileName = document.createElement('div');
+        var submit = document.getElementById('push');
+        var activeButton = document.createElement('div');
+        var bb = document.createElement('div');
+		var sendme = document.createElement('div');
+        WindowOnLoad()
+        function WindowOnLoad()
+        {
+            var wrap = document.getElementById('push-up');
+            fileName.setAttribute('id','FileName');
+            activeButton.setAttribute('id','activeBrowseButton');
+            fileInput.value = '';
+            fileInput.onchange = HandleChanges;
+            fileInput.onmouseover = MakeActive;
+            fileInput.onmouseout = UnMakeActive;
+            submit.className = 'customFile';
+            fileInput.className = 'customFile';
+            bb.className = 'fakeButton';
+            activeButton.className = 'fakeButton';
+			sendme.className='fakeSubmit';
+            wrap.appendChild(bb);
+            wrap.appendChild(activeButton);
+            wrap.appendChild(fileName);
+			wrap.appendChild(sendme);
+        };
+        function HandleChanges()
+        {
+            file = fileInput.value;
+            reWin = /.*\\(.*)/;
+            var fileTitle = file.replace(reWin, "$1");
+            reUnix = /.*\/(.*)/;
+            fileTitle = fileTitle.replace(reUnix, "$1");
+            fileName.innerHTML = fileTitle;
+            
+            var RegExExt =/.*\.(.*)/;
+            var ext = fileTitle.replace(RegExExt, "$1");
+            
+            var pos;
+            if (ext){
+                switch (ext.toLowerCase())
+                {
+                    case 'bmp': pos = '16'; break;                       
+					case 'jpg': pos = '32'; break;
+					case 'jpeg': pos = '32'; break;
+					case 'png': pos = '48'; break;
+					case 'gif': pos = '64'; break;
+					case 'psd': pos = '80'; break;
+                    default: pos = '176'; break;
+                };
+                
+            };
+            
+        };
+        function MakeActive()
+        {
+           activeButton.style.display = 'block';
+        };
+        function UnMakeActive()
+        {
+            activeButton.style.display = 'none';
+        };
 });
 
 function lock(x, y){

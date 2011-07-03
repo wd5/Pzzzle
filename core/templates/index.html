@@ -5,20 +5,33 @@
         <div id="imagery-outer">
             <div id="imagery-inner">
                 {% for cell in cells %}
-                    <div class="cell">
-                        <img class="cell_img" src="{{ cell.url }}" width="100px" height="100px">
-                        <div class="control" id="control_{{ cell.x }}_{{ cell.y }}">
-                            {% if cell.lock %}
-                                {{ cell.lock }} min
-                                <img src="/media/i/protected.png" alt="Залочено">
+                    <div>
+						<img src="{{ cell.url }}" width="100px" height="100px">
+                        {% if cell.lock %}
+								<div class="hovering protected control" id="control_{{ cell.x }}_{{ cell.y }}">
+									<div class="actions">
+										<p class="upload blocked">{{ cell.lock }} min</p>
+										<p class="guardian"><img src="/media/i/protected.png" alt="Залочено"></p>
+									</div>
+								</div>
                             {% else %}
-                                <a href="#" onclick="window.location='/upload?x={{ cell.x }}&y={{ cell.y }}';">upl</a> &nbsp;
-                                <a href="#" class="icon-link js-lock" id="lock_{{ cell.x }}_{{ cell.y }}" 
-                                    onclick="lock({{ cell.x }}, {{ cell.y }});">
-                                    <img src="/media/i/for-protection.png" alt="Залочить">
-                                </a>
+								<div class="hovering for-protection">
+									<div class="actions">
+										<p class="upload">
+											<a href="#" onclick="window.location='/upload?x={{ cell.x }}&y={{ cell.y }}';">
+												<img src="/media/i/up.png">
+											</a>
+										</p>
+										<p class="guardian">
+											<a href="#" class="icon-link js-lock" id="lock_{{ cell.x }}_{{ cell.y }}" 
+												onclick="lock({{ cell.x }}, {{ cell.y }});">
+												<img src="/media/i/for-protection.png" alt="Залочить">
+											</a>
+										</p>
+									</div>
+								</div>
+
                             {% endif %}
-                        </div>
                     </div>
                 {% endfor %}
             </div>
