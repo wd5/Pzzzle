@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
 
 <head>
@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-    
+    <script type="text/javascript" src="/media/ba-throttle-debounce.min.js"></script>
     <script type="text/javascript">
         MEDIA_URL = '{{ MEDIA_URL }}';
     </script>
@@ -22,16 +22,17 @@
 <body>
     <div id="infrawr">
         <div id="usus">
-            <h1>Pzzzle.com</h1>
-            <div id="linking"><span>What to do?</span> <span>Screenshots <span>About pzzzle</span></div>
-
+            <header>
+				<h1>Pzzzle.com</h1>
+				<div id="linking"><span>What to do?</span> <span>Screenshots <span>About pzzzle</span></div>
+			</header>
             {% block content %}{% endblock %}
-        </div>
+        
+			<div id="mousepad"><div id="cursor-touch"></div></div>
+			<footer>(c) <span>Idea & design by</span> <span class="tribute">Vitaliy Rynskiy</span>  <span>Serverside by</span> <span class="tribute">Mikhail Polykovskij</span> <span>Clientside by</span> <span class="tribute">Oleg Reznikov</span> <span>Special thanks</span> <span class="tribute">Lexsa</span></footer>
+		</div>
 		<div class="splasher"></div>
-    </div>
-
-    (c) <span>Idea & design by</span> <span>Vitaliy Rynskiy</span>  <span>Serverside by</span> <span>Mikhail Polykovskij</span> <span>Clientside by Oleg Reznikov</span>
-
+	</div>
 <script type="text/javascript">
  var _gaq = _gaq || [];
  _gaq.push(['_setAccount', 'UA-23993349-1']);
