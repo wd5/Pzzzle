@@ -9,8 +9,10 @@ from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import RequestContext, Context, loader
 from django.forms import *
+from django.core.urlresolvers import reverse
 
 from core.models import Cell, Lock
+from core import screenshot
 
 
 def render_to_response(request, template_name, context_dict={}, cookies={}):
@@ -22,14 +24,15 @@ def render_to_response(request, template_name, context_dict={}, cookies={}):
     return response
 
 
-def index(request):
+def index(request, message=None):
     locks = Cell.get_locks()
     context = {
         'cells': [ {'x': x+1,
                     'y': y+1,
                     'url': settings.MEDIA_URL + 'data/%s_%s.jpg' % (x+1, y+1),
                     'lock': locks.get((x+1, y+1), False),
-        } for y in xrange(settings.TABLE[1]) for x in xrange(settings.TABLE[0]) ]
+        } for y in xrange(settings.TABLE[1]) for x in xrange(settings.TABLE[0]) ],
+        'message': message,
     }
     return render_to_response(request, 'index.html', context)
 
@@ -122,3 +125,22 @@ def get_point(query_dict):
     point_form = PointForm(query_dict)
     point_form.is_valid()
     return point_form.cleaned_data['x'], point_form.cleaned_data['y']
+
+
+def screenshot_make(request):
+    if not request.POST:
+        raise Http404
+    
+    try:
+        screenshot.make_screenshot(request.META['REMOTE_ADDR'])
+        return HttpResponseRedirect(reverse('screenshot_view', args=[1]))
+    
+    except screenshot.NotAllowed:
+        return index(request, message=u"Генерация скриншотов разрешена раз в час.")
+    except screenshot.LockError:
+        return index(request, message=u"Ошибка блокировки. Попробуйте еще раз.")
+
+    
+def screenshot_view(request, page):
+    number = screenshot.get_current_number() + int(page) - 1
+    return render_to_response(request, 'screenshot.html', {'number': number})

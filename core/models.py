@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from django.db import models
 from django.conf import settings
 from django.core.cache import cache
@@ -50,7 +50,7 @@ class Lock(models.Model):
 
     @classmethod
     def can_lock(cls, x, y, ip):
-        check = cache.get('lock/%s' % ip)
+        check = cache.get('%s/lock/%s' % (settings.CACHE_ROOT, ip))
         if check:
             return False, u"Блокировка не чаще раза в 10 секунд"
 
@@ -67,10 +67,8 @@ class Lock(models.Model):
     @classmethod
     def add(cls, x, y, ip):
         cls.objects.create(x=x, y=y, ip=ip, lock_dt=datetime.now())
-        cache.set('lock/%s' % ip, True, 10)
+        cache.set('%s/lock/%s' % (settings.CACHE_ROOT, ip), True, 10)
 
     class Meta:
         verbose_name = u"Блокировка"
         verbose_name_plural = u"Блокировки"
-
-
