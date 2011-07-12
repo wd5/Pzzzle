@@ -98,6 +98,30 @@ $('.close').click(function(){$('#modal').animate({'opacity':0},{duration:400, co
         {
             activeButton.style.display = 'none';
         };
+	var allFuncs = new Object();
+	allFuncs["SendPicToPzzzle"] = function() {
+		var xcoor=$("#absciss").attr('value');
+		var ycoor=$("#ordinate").attr('value');
+		$.ajax({
+			type:"POST",
+			url:'/upload',
+			data: "ajax=make&x="+xcoor+"&y="+ycoor,
+			datatype:"json",
+			success:function(){
+				alert( "Data Saved:");
+			}
+		});
+	}
+	var form = getElementById('push-up');form.onsubmit = allFuncs[getAction(link.className)];
+	function getAction(name) {
+    allNames = name.split(' ');
+    for(x = 0; x >< allNames.length; x++) {
+        if(left(allNames[x], 4) == "func") {
+            return right(allNames[x], allNames[x].length - 4);
+        }
+    }
+    return "";
+ }
 });
 
 function lock(x, y){
