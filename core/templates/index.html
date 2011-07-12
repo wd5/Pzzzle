@@ -1,6 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
+    {% if message %}
+        <div style="font: 120% red">{{  message }}</div>
+    {%  endif %}
+    <div style="text-align: center;">
+        <form action="{% url screenshot_make %}" method="POST">
+            <input type="submit" value="Сделать скриншот">
+            {% csrf_token %}
+        </form>
+    </div>
     {% spaceless %}
         <div id="imagery-outer">
             <div id="imagery-inner">
@@ -44,9 +53,9 @@
 				</form>
 				<div id="preview"></div>
 				<p class="info">100x100 px</p>
-				<div class="action-icons"><div><img src="wth.png"/></div><div><img src="link.png"/></div></div>
+				<div class="action-icons"><div><img src="{{ MEDIA_URL }}i/wth.png"/></div><div><img src="{{ MEDIA_URL }}i/link.png"/></div></div>
 				<div class="space"><p>≤ 30 kb</p></div>
-				<img src="close.png" class="close"/>
+				<img src="{{ MEDIA_URL }}i/close.png" class="close"/>
 			</div>
         </div>
     {% endspaceless %}
