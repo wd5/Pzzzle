@@ -13,17 +13,6 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'pzzzle',                      # Or path to database file if using sqlite3.
-        'USER': 'root',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    }
-}
-
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -90,16 +79,7 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.messages',
-    'django.contrib.admin',
     'django_errorlog',
-
-    'south',
-
     'core',
 )
 
@@ -108,8 +88,16 @@ FORCE_SCRIPT_NAME = ""
 TABLE = (30, 5)
 THUMBNAIL_SIZE = (100, 100)
 THUMBNAIL_PATH = os.path.join(MEDIA_ROOT, 'data')
-CELL_LOCK_PERIOD = timedelta(minutes=10)
-IP_LOCK_PERIOD = timedelta(days=1)
+
+# на сколько блокируется одна ячейка
+CELL_LOCK_PERIOD = 10*60
+
+# Как часто можно блокировать ячейки с одного IP
+IP_LOCK_PERIOD = 10
+
+# Как часто можно блокировать одну и ту же ячейку с одного IP
+IP_CELL_LOCK_PERIOD = 24*60*60
+
 
 LOG_PATH = '/var/log/projects/pzzzle'
 

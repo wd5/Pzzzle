@@ -11,8 +11,8 @@ from django.template import RequestContext, Context, loader
 from django.forms import *
 from django.core.urlresolvers import reverse
 
-from core.models import Cell, Lock
 from core import screenshot
+from core import locks
 
 
 def render_to_response(request, template_name, context_dict={}, cookies={}):
@@ -25,13 +25,13 @@ def render_to_response(request, template_name, context_dict={}, cookies={}):
 
 
 def index(request, message=None):
-    locks = Cell.get_locks()
+    cells = locks.get_cells_lock()
+    for cell in cells:
+        cell['url'] = settings.MEDIA_URL + 'data/%s_%s.jpg' % (cell['x'], cell['y'])
+        cell['elapsed'] = cell['lock'] and u"%d мин" % ((settings.CELL_LOCK_PERIOD - cell['lock']) / 60) or ""
+        
     context = {
-        'cells': [ {'x': x+1,
-                    'y': y+1,
-                    'url': settings.MEDIA_URL + 'data/%s_%s.jpg' % (x+1, y+1),
-                    'lock': locks.get((x+1, y+1), False),
-        } for y in xrange(settings.TABLE[1]) for x in xrange(settings.TABLE[0]) ],
+        'cells': cells,
         'message': message,
     }
     return render_to_response(request, 'index.html', context)
@@ -40,7 +40,7 @@ def index(request, message=None):
 def upload(request):
     if request.FILES:
         x, y = get_point(request.POST)
-        if not Cell.is_locked(x, y):
+        if not locks.get_cell_lock(x, y):
             thumb = resize(StringIO(request.FILES['pic'].read()))
             thumb.save(os.path.join(settings.THUMBNAIL_PATH, '%s_%s.jpg' % (x, y)))
 
@@ -70,18 +70,14 @@ def make_square(img):
 def lock(request):
     x, y = get_point(request.GET)
     ip = request.META['REMOTE_ADDR']
-    if not Cell.is_locked(x, y):
-        lock_res = Lock.can_lock(x, y, ip)
-        if lock_res[0]:
-            Cell.lock(x, y, ip)
-            Lock.add(x, y, ip)
-    
+    try:
+        res = locks.lock_cell(ip, x, y)
+        if res[0]:
             return HttpResponse('success')
         else:
-            return HttpResponse(lock_res[1]) # Error message
-    
-    else:
-        return HttpResponse(u'Картинка заблокирована')
+            return HttpResponse(res[1])
+    except locks.LockError:
+        return HttpResponse(u"Не шмогла :(")
 
 
 def get_logger(name):
