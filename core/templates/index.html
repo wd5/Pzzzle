@@ -45,7 +45,12 @@
                 {% endfor %}
             </div>
 			<div id="modal">
-				<form id="push-up"><input id="File1" type="file" size="86"/><input type="submit" value="Pzzzle!" id="push"/></form>
+				<form id="push-up" action="/upload" enctype="multipart/form-data" onsubmit="return false" class="funcSendPicToPzzzle">      
+					<input type="hidden" name="x" value="{{ x }}" id="absciss"/>
+					<input type="hidden" name="y" value="{{ y }}" id="ordinat"/>
+					<input id="File1" type="file" size="86"/>
+					<input type="submit" value="Pzzzle!" id="push"/>
+				</form>
 				<div id="preview"></div>
 				<p class="info">100x100 px</p>
 				<div class="action-icons"><div><img src="{{ MEDIA_URL }}i/wth.png"/></div><div><img src="{{ MEDIA_URL }}i/link.png"/></div></div>
