@@ -70,7 +70,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'pzzzle.urls'
+ROOT_URLCONF = 'pzzzle2.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -108,7 +108,7 @@ LOGGING_FORMAT = '%(asctime)s %(name)-15s %(levelname)s %(message)s'
 LOGGING_MAX_FILE_SIZE = 1 * 1024 * 1024 #: Максимальный размер файла с логами в байтах.
 LOGGING_MAX_FILES_COUNT = 10 #: Количество бекапов файлов с логами.
 
-CACHE_ROOT = 'pzzzle/'
+CACHE_ROOT = 'pzzzle2/'
 CACHE_BACKEND = 'locmem:///'
 
 try:
