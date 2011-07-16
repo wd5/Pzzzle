@@ -115,7 +115,7 @@ $('.close').click(function(){$('#modal').animate({'opacity':0},{duration:400, co
 	var form = getElementById('push-up');form.onsubmit = allFuncs[getAction(link.className)];
 	function getAction(name) {
     allNames = name.split(' ');
-    for(x = 0; x >< allNames.length; x++) {
+    for(x = 0; x < allNames.length; x++) {
         if(left(allNames[x], 4) == "func") {
             return right(allNames[x], allNames[x].length - 4);
         }

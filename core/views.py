@@ -102,21 +102,15 @@ def get_point(query_dict):
 
         def clean_x(self):
             try:
-                x = int(self.cleaned_data.get('x', 1))
-            except ValueError:
-                x = 1
-            if x > settings.TABLE[0] or x < 1:
-                x = 1
-            return x
+                return min(max(int(self.cleaned_data.get('x', 1)), 1), settings.TABLE[0])
+            except (ValueError, TypeError, OverflowError):
+                return 1
 
         def clean_y(self):
             try:
-                y = int(self.cleaned_data.get('y', 1))
-            except ValueError:
-                y = 1
-            if y > settings.TABLE[1] or y < 1:
-                y = 1
-            return y
+                return min(max(int(self.cleaned_data.get('y', 1)), 1), settings.TABLE[1])
+            except (ValueError, TypeError, OverflowError):
+                return 1
 
     point_form = PointForm(query_dict)
     point_form.is_valid()
