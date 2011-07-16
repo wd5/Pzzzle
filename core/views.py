@@ -29,7 +29,8 @@ def index(request, message=None):
     for cell in cells:
         cell['url'] = settings.MEDIA_URL + 'data/%s_%s.jpg' % (cell['x'], cell['y'])
         cell['elapsed'] = cell['lock'] and u"%d мин" % ((settings.CELL_LOCK_PERIOD - cell['lock']) / 60) or ""
-        
+        cell['x'] = make_twodigit(cell['x'])
+    
     context = {
         'cells': cells,
         'message': message,
@@ -38,6 +39,9 @@ def index(request, message=None):
 
 
 def upload(request):
+    print request.GET
+    print request.POST
+    print request.FILES
     if request.FILES:
         x, y = get_point(request.POST)
         if not locks.get_cell_lock(x, y):
@@ -47,7 +51,10 @@ def upload(request):
             log = get_logger('upload')
             log.info('%s (%s, %s)', request.META['REMOTE_ADDR'], x, y)
         #return render_to_response(request, 'upload_complete.html', {'x': x, 'y': y, 'thumb': thumb})
-        return HttpResponseRedirect('/')
+        if request.POST.get('ajax'):
+            return HttpResponce('ok')
+        else:
+            return HttpResponseRedirect('/')
 
     else:
         x, y = get_point(request.GET)
@@ -115,6 +122,13 @@ def get_point(query_dict):
     point_form = PointForm(query_dict)
     point_form.is_valid()
     return point_form.cleaned_data['x'], point_form.cleaned_data['y']
+
+
+def make_twodigit(number):
+    if number < 10:
+        return '0%s' % number
+    else:
+        return str(number)
 
 
 def screenshot_make(request):

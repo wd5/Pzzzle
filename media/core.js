@@ -1,23 +1,28 @@
 $(document).ready(function() {
-  $('.uploader').click(function(){
-    //Begin loading of all stuff
-    $.get($(this).attr('href'), function(data) {
-      $('#uploader').html(data).show();
-      
-      $('#uploader .submit').click(function() {
-        //Disable layer. Maybe send via ajax?
-      });
-    });
-    return false;
-  });
+$('#uploader').hide();
 });
 
-function upload_complete(id, url) {
-  $(id).attr('src') = url + '?math=' + Math.random();
-  $('#uploader').hide();
-}
 
 $(window).load(function(){
+function left(str, n){
+	if (n <= 0)
+	    return "";
+	else if (n > String(str).length)
+	    return str;
+	else
+	    return String(str).substring(0,n);
+}
+function right(str, n){
+    if (n <= 0)
+       return "";
+    else if (n > String(str).length)
+       return str;
+    else {
+       var iLen = String(str).length;
+       return String(str).substring(iLen, iLen - n);
+    }
+}
+
     var wrapper = $('#mousepad');
     var content = $('#cursor-touch');
 
@@ -33,7 +38,18 @@ $(window).load(function(){
     }
 $('#imagery-inner>div').mouseover(function(){$('#imagery-inner>div').css('z-index',1);$(this).css('z-index',10);$(this).find('.hovering').stop().animate({'opacity':1},400);});
 $('#imagery-inner>div').mouseleave(function(){$(this).css('z-index',1);$(this).find('.hovering').stop().animate({'opacity':0},200);});
-$('.upload').click(function(){$('.splasher').css('display','block').stop().animate({'opacity':0.75},400);$('#modal').css('display','block').stop().animate({'opacity':1},900)});
+$('.upload').click(function(){
+	$('.splasher').css('display','block').stop().animate({'opacity':0.75},400);$('#modal').css('display','block').stop().animate({'opacity':1},900)
+	var target=$(this).find('a').attr('class').split(' ');console.log(target);
+	for(x = 0; x<=target.length; x++) {
+		if(left(target[x], 1) == "x") {
+	     	    $('form').find("#absciss").attr('value',right(target[x],2));
+      	 	}
+		if(left(target[x], 1) == "y") {
+   	         $('form').find("#ordinat").attr('value',right(target[x],1));
+    	 	}
+   	 }
+});
 $('.close').click(function(){$('#modal').animate({'opacity':0},{duration:400, complete:function(){$(this).css("display","none")}});$('.splasher').animate({'opacity':0},{duration:400, complete:function(){$(this).css("display","none")}});})
 
         var fileInput = document.getElementById('File1');
@@ -98,32 +114,58 @@ $('.close').click(function(){$('#modal').animate({'opacity':0},{duration:400, co
         {
             activeButton.style.display = 'none';
         };
-	var allFuncs = new Object();
-	allFuncs["SendPicToPzzzle"] = function() {
+function disableActions () {
+    var links = document.getElementsByTagName("a");    for (i=0; i < links.length; i++){
+        var link = links[i];
+        link.onclick = function() {return false;}
+    }
+}
+disableActions();
+$('#push-up').iframePostForm({
+       		  post : function (){
+         	  	 var msg = !$('input[type=file]').val().length ? 'Submitting form...' : 'Uploading file...';
+           		 /*jaeFunctions.setMessage('<div class="message">' + msg + '</div>', 'message', false, true);*/return false;
+      		  },
+      		  complete : function (response){
+           		 /*jaeFunctions.setMessage(response, 'success', false, true);*/
 		var xcoor=$("#absciss").attr('value');
-		var ycoor=$("#ordinate").attr('value');
+		var ycoor=$("#ordinat").attr('value');
+				if(xcoor[0]=="0"){xcoor=xcoor.substr(1,xcoor.length);}
+				var img = new Image();
+				$(img).load(function(){$(this).hide();$('#preview').append(this);$(this).fadeIn();})
+					.error(function(){alert('��!');})
+					.attr('src', '/media/data/'+xcoor+'_'+ycoor+'.jpg');return false;
+       		 }
+    		});
+/*var allFuncs = new Object();
+	allFuncs["SendPicToPzzzle"] = function() {
+
+
 		$.ajax({
 			type:"POST",
 			url:'/upload',
 			data: "ajax=make&x="+xcoor+"&y="+ycoor,
 			datatype:"json",
 			success:function(){
-				alert( "Data Saved:");
+				if(xcoor[0]=="0"){xcoor=xcoor.substr(1,xcoor.length);}
+				var img = new Image();
+				$(img).load(function(){$(this).hide();$('#preview').append(this);$(this).fadeIn();})
+					.error(function(){alert('��!');})
+					.attr('src', '/media/data/'+xcoor+'_'+ycoor+'.jpg');
 			}
 		});
+		return false;
 	}
-	var form = getElementById('push-up');form.onsubmit = allFuncs[getAction(link.className)];
+	var form = document.getElementById('push-up');form.onsubmit = allFuncs[getAction(form.className)];
 	function getAction(name) {
     allNames = name.split(' ');
-    for(x = 0; x < allNames.length; x++) {
+    for(x = 0; x<=allNames.length; x++) {
         if(left(allNames[x], 4) == "func") {
             return right(allNames[x], allNames[x].length - 4);
         }
     }
     return "";
- }
-});
-
+ }*/
 function lock(x, y){
     console.log('CLICK');
     $.get('/lock', {x: x, y: y}, function(result){
@@ -135,3 +177,4 @@ function lock(x, y){
             });
     return false;
 }
+});
