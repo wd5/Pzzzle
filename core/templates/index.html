@@ -45,12 +45,12 @@
                 {% endfor %}
             </div>
 				<div id="modal">
-				<form id="push-up" action="/upload" enctype="multipart/form-data" method="post">    
+				<form id="push-up" action="/upload" enctype="multipart/form-data" method="post" onSubmit="return AIM.submit(this, {'onStart' : startCallback, 'onComplete' : completeCallback})">    
 					{% csrf_token %}  
 					<input type="hidden" name="x" value="" id="absciss"/>
 					<input type="hidden" name="y" value="" id="ordinat"/>
 					<input type="hidden" name="ajax" value="make"/>
-					<input id="File1" type="file" size="86"/>
+					<input id="File1" type="file" size="86" name="pic"/>
 					<input type="submit" value="Pzzzle!" id="push"/>
 				</form>
 				<div id="preview"></div>

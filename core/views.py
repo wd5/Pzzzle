@@ -34,14 +34,15 @@ def index(request, message=None):
     context = {
         'cells': cells,
         'message': message,
+        'request': request,
     }
     return render_to_response(request, 'index.html', context)
 
 
 def upload(request):
-    print request.GET
-    print request.POST
-    print request.FILES
+    #print request.GET
+    #print request.POST
+    #print request.FILES
     if request.FILES:
         x, y = get_point(request.POST)
         if not locks.get_cell_lock(x, y):
@@ -50,16 +51,15 @@ def upload(request):
 
             log = get_logger('upload')
             log.info('%s (%s, %s)', request.META['REMOTE_ADDR'], x, y)
-        #return render_to_response(request, 'upload_complete.html', {'x': x, 'y': y, 'thumb': thumb})
-        if request.POST.get('ajax'):
-            return HttpResponce('ok')
+        if False and request.POST.get('ajax'):
+            return HttpResponse('ok')
         else:
             return HttpResponseRedirect('/')
 
     else:
         x, y = get_point(request.GET)
 
-        return render_to_response(request, 'upload.html', {'x': x, 'y': y})
+        return render_to_response(request, 'upload.html', {'x': x, 'y': y, 'request': request})
 
 
 def resize(img):

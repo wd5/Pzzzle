@@ -121,51 +121,21 @@ function disableActions () {
     }
 }
 disableActions();
-$('#push-up').iframePostForm({
-       		  post : function (){
-         	  	 var msg = !$('input[type=file]').val().length ? 'Submitting form...' : 'Uploading file...';
-           		 /*jaeFunctions.setMessage('<div class="message">' + msg + '</div>', 'message', false, true);*/return false;
-      		  },
-      		  complete : function (response){
-           		 /*jaeFunctions.setMessage(response, 'success', false, true);*/
-		var xcoor=$("#absciss").attr('value');
-		var ycoor=$("#ordinat").attr('value');
-				if(xcoor[0]=="0"){xcoor=xcoor.substr(1,xcoor.length);}
-				var img = new Image();
-				$(img).load(function(){$(this).hide();$('#preview').append(this);$(this).fadeIn();})
-					.error(function(){alert('О©╫О©╫!');})
-					.attr('src', '/media/data/'+xcoor+'_'+ycoor+'.jpg');return false;
-       		 }
-    		});
-/*var allFuncs = new Object();
-	allFuncs["SendPicToPzzzle"] = function() {
-
-
-		$.ajax({
-			type:"POST",
-			url:'/upload',
-			data: "ajax=make&x="+xcoor+"&y="+ycoor,
-			datatype:"json",
-			success:function(){
-				if(xcoor[0]=="0"){xcoor=xcoor.substr(1,xcoor.length);}
-				var img = new Image();
-				$(img).load(function(){$(this).hide();$('#preview').append(this);$(this).fadeIn();})
-					.error(function(){alert('О©╫О©╫!');})
-					.attr('src', '/media/data/'+xcoor+'_'+ycoor+'.jpg');
+function startCallback() {
+				// make something useful before submit (onStart)
+				var xcoor=$("#absciss").attr('value');
+		var ycoor=$("#ordinat").attr('value');return false;
 			}
-		});
+function completeCallback(response) {
+		// make something useful after (onComplete)
+		if(xcoor[0]=="0"){xcoor=xcoor.substr(1,xcoor.length);}
+		var img = new Image();
+		$(img).load(function(){$(this).hide();$('#preview').append(this);$(this).fadeIn();})
+			.error(function(){alert('ых!');})
+			.attr('src', '/media/data/'+xcoor+'_'+ycoor+'.jpg');
+		$('footer').append(response);
 		return false;
-	}
-	var form = document.getElementById('push-up');form.onsubmit = allFuncs[getAction(form.className)];
-	function getAction(name) {
-    allNames = name.split(' ');
-    for(x = 0; x<=allNames.length; x++) {
-        if(left(allNames[x], 4) == "func") {
-            return right(allNames[x], allNames[x].length - 4);
-        }
-    }
-    return "";
- }*/
+		}
 function lock(x, y){
     console.log('CLICK');
     $.get('/lock', {x: x, y: y}, function(result){

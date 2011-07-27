@@ -10,7 +10,7 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
     <script type="text/javascript" src="/media/ba-throttle-debounce.min.js"></script>
     <script type="text/javascript" src="/media/browserDetect-min.js"></script>
-    <script type="text/javascript" src="/media/iframe-postform.js"></script>
+    <script type="text/javascript" src="/media/webtoolkit.aim.js"></script>
     <script type="text/javascript">
         MEDIA_URL = '{{ MEDIA_URL }}';
     </script>
@@ -46,5 +46,13 @@
    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
  })();
 </script>
+
+<hr>
+GET: {{ request.GET|pprint }}
+<br>
+POST: {{ request.POST|pprint }}
+<br>
+FILES: {{ request.FILES|pprint }}
+
 </body>
 </html>
