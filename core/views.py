@@ -52,7 +52,7 @@ def upload(request):
             log = get_logger('upload')
             log.info('%s (%s, %s)', request.META['REMOTE_ADDR'], x, y)
         if request.POST.get('ajax'):
-            return HttpResponse('ok')
+            return render_to_response(request, 'upload_complete.html', {'x': x, 'y': y, 'request': request})
         else:
             return HttpResponseRedirect('/')
 
