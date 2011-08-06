@@ -15,7 +15,7 @@
             <div id="imagery-inner">
                 {% for cell in cells %}
                     <div>
-						<img src="{{ cell.url }}" width="100px" height="100px">
+						<img src="{{ cell.url }}" width="100px" height="100px" id="cell_image_{{ cell.x }}_{{ cell.y }}" />
                         {% if cell.lock %}
 								<div class="hovering protected control" id="control_{{ cell.x }}_{{ cell.y }}">
 									<div class="actions">
@@ -45,7 +45,7 @@
                 {% endfor %}
             </div>
 				<div id="modal">
-				<form id="push-up" action="/upload" enctype="multipart/form-data" method="post">    
+				<form id="push-up" action="/upload" enctype="multipart/form-data" method="post" target="_iframe">    
 					{% csrf_token %}  
 					<input type="hidden" name="x" value="" id="absciss"/>
 					<input type="hidden" name="y" value="" id="ordinat"/>
