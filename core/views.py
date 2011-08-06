@@ -34,6 +34,7 @@ def index(request, message=None):
     context = {
         'cells': cells,
         'message': message,
+        'request': request,
     }
     return render_to_response(request, 'index.html', context)
 
@@ -47,16 +48,15 @@ def upload(request):
 
             log = get_logger('upload')
             log.info('%s (%s, %s)', request.META['REMOTE_ADDR'], x, y)
-        #return render_to_response(request, 'upload_complete.html', {'x': x, 'y': y, 'thumb': thumb})
         if request.POST.get('ajax'):
-            return HttpResponce('ok')
+            return render_to_response(request, 'upload_complete.html', {'x': x, 'y': y, 'iframe': request.POST['iframe_name']})
         else:
             return HttpResponseRedirect('/')
 
     else:
         x, y = get_point(request.GET)
 
-        return render_to_response(request, 'upload.html', {'x': x, 'y': y})
+        return render_to_response(request, 'upload.html', {'x': x, 'y': y, 'request': request})
 
 
 def resize(img):
