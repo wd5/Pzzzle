@@ -10,7 +10,7 @@ $(window).load(function () {
         else return String(str).substring(0, n);
     }
 
-    window.upload_complete = function(x,y) {
+    window.upload_complete = function(x,y, iframe_name) {
       var img = new Image();
       $(img).load(function () {
           $(this).hide();
@@ -19,6 +19,9 @@ $(window).load(function () {
       }).error(function () {
           alert('ÙÈ!');
       }).attr('src', '/media/data/' + x + '_' + y + '.jpg');
+      
+      console.log(iframe_name);
+      $('#' + iframe_name).remove();
       
       var new_x = (x < 10) ? ('0' + x) : x;
       
@@ -193,6 +196,10 @@ $(window).load(function () {
 
     $('#push-up').submit(function () {
       //display uploading progress bar
+      var iframe_name = 'iframe_' + Math.random().toString().replace('.', '');
+      var iframe = $('<iframe name="' + iframe_name + '" id="' + iframe_name + '" class="hidden-iframe"></iframe>');
+      $('body').append(iframe);
+      $('#push-up').attr('target', iframe_name).find('#iframe_name').val(iframe_name);
     })
 
     function startCallback() {
