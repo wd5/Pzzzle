@@ -98,6 +98,9 @@ IP_LOCK_PERIOD = 10
 # Как часто можно блокировать одну и ту же ячейку с одного IP
 IP_CELL_LOCK_PERIOD = 24*60*60
 
+# Как часто можно делать скриншоты
+SCREENSHOT_PERIOD = 60*60
+
 
 LOG_PATH = '/var/log/projects/pzzzle'
 

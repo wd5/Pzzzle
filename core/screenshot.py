@@ -37,7 +37,7 @@ def can_make_screenshot(ip):
     if cache.get('%s/screenshot/%s' % (settings.CACHE_ROOT, ip)):
         return False
         
-    cache.set('%s/screenshot/%s' % (settings.CACHE_ROOT, ip), True, 60*60)
+    cache.set('%s/screenshot/%s' % (settings.CACHE_ROOT, ip), True, settings.SCREENSHOT_PERIOD)
     return True
 
 
