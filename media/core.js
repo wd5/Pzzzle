@@ -20,13 +20,11 @@ $(window).load(function () {
           alert('ÙÈ!');
       }).attr('src', '/media/data/' + x + '_' + y + '.jpg');
       
-      console.log(iframe_name);
       $('#' + iframe_name).remove();
       
       var new_x = (x < 10) ? ('0' + x) : x;
       
       $('#cell_image_' + new_x + '_' + y).attr('src', '/media/data/' + x + '_' + y + '.jpg?random=' + Math.random());
-      console.log('completeCallback done');
       $('.close').trigger('upload:complete');
       return true;
     }
@@ -71,6 +69,12 @@ $(window).load(function () {
         }, 200);
     });
     $('.upload').click(function () {
+        
+        //Clear inputs
+        $('#preview').html(''); //Clear preview
+        $('#File1').html($('#File1').html()); //Very ugly hack
+        $('#FileName').html('');
+        
         $('.splasher').css('display', 'block').stop().animate({
             'opacity': 0.75
         }, 400);
@@ -78,7 +82,6 @@ $(window).load(function () {
             'opacity': 1
         }, 900)
         var target = $(this).find('a').attr('class').split(' ');
-        console.log(target);
         for (x = 0; x <= target.length; x++) {
             if (left(target[x], 1) == "x") {
                 $('form').find("#absciss").attr('value', right(target[x], 2));
@@ -204,7 +207,6 @@ $(window).load(function () {
 
     function startCallback() {
         // make something useful before submit (onStart)
-        console.log('startCallback done');
         return true;
     }
 
@@ -224,12 +226,10 @@ $(window).load(function () {
         }).error(function () {
             alert('ÙÈ!');
         }).attr('src', '/media/data/' + xcoor + '_' + ycoor + '.jpg');
-        console.log('completeCallback done');
         return true;
     }
 
     function lock(x, y) {
-        console.log('CLICK');
         $.get('/lock', {
             x: x,
             y: y
