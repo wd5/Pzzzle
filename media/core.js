@@ -121,21 +121,32 @@ function disableActions () {
     }
 }
 disableActions();
+
+$('#push-up').submit(function(){
+	alert("Holy crap");
+	AIM.submit(this, {'onStart' : startCallback, 'onComplete' : completeCallback})
+})
+
 function startCallback() {
-				// make something useful before submit (onStart)
-				var xcoor=$("#absciss").attr('value');
-		var ycoor=$("#ordinat").attr('value');return false;
-			}
-function completeCallback(response) {
+	// make something useful before submit (onStart)
+	console.log('startCallback done');
+    return true;
+}
+
+function completeCallback() {
+
 		// make something useful after (onComplete)
+		var xcoor = $("#absciss").attr('value');
+		var ycoor = $("#ordinat").attr('value');
 		if(xcoor[0]=="0"){xcoor=xcoor.substr(1,xcoor.length);}
 		var img = new Image();
 		$(img).load(function(){$(this).hide();$('#preview').append(this);$(this).fadeIn();})
 			.error(function(){alert('ых!');})
 			.attr('src', '/media/data/'+xcoor+'_'+ycoor+'.jpg');
-		$('footer').append(response);
-		return false;
+		console.log('completeCallback done');
+		return true;
 		}
+
 function lock(x, y){
     console.log('CLICK');
     $.get('/lock', {x: x, y: y}, function(result){
@@ -148,3 +159,4 @@ function lock(x, y){
     return false;
 }
 });
+

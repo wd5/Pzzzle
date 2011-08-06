@@ -10,13 +10,13 @@ AIM = {
 	frame : function(c) {
  
 		var n = 'f' + Math.floor(Math.random() * 99999);
-		var d = document.createElement('DIV');
+		var d = document.createElement('iframe');
 		d.innerHTML = '';
-		document.body.appendChild(d);
+		document.body.appendChild(d).setAttribute('id',n);console.log('frame-exists');
  
 		var i = document.getElementById(n);
 		if (c && typeof(c.onComplete) == 'function') {
-			i.onComplete = c.onComplete;
+			i.onComplete = c.onComplete;console.log('complete-set');
 		}
  
 		return n;
@@ -29,7 +29,7 @@ AIM = {
 	submit : function(f, c) {
 		AIM.form(f, AIM.frame(c));
 		if (c && typeof(c.onStart) == 'function') {
-			return c.onStart();
+			console.log('go');return c.onStart();
 		} else {
 			return true;
 		}
@@ -49,7 +49,7 @@ AIM = {
 		}
  
 		if (typeof(i.onComplete) == 'function') {
-			i.onComplete(d.body.innerHTML);
+			i.onComplete(d.body.innerHTML);console.log('complete-finish');
 		}
 	}
  

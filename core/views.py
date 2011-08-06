@@ -40,9 +40,9 @@ def index(request, message=None):
 
 
 def upload(request):
-    #print request.GET
-    #print request.POST
-    #print request.FILES
+    print request.GET
+    print request.POST
+    print request.FILES
     if request.FILES:
         x, y = get_point(request.POST)
         if not locks.get_cell_lock(x, y):
@@ -51,7 +51,7 @@ def upload(request):
 
             log = get_logger('upload')
             log.info('%s (%s, %s)', request.META['REMOTE_ADDR'], x, y)
-        if False and request.POST.get('ajax'):
+        if request.POST.get('ajax'):
             return HttpResponse('ok')
         else:
             return HttpResponseRedirect('/')

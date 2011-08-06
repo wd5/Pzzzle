@@ -45,7 +45,7 @@
                 {% endfor %}
             </div>
 				<div id="modal">
-				<form id="push-up" action="/upload" enctype="multipart/form-data" method="post" onSubmit="return AIM.submit(this, {'onStart' : startCallback, 'onComplete' : completeCallback})">    
+				<form id="push-up" action="/upload" enctype="multipart/form-data" method="post">    
 					{% csrf_token %}  
 					<input type="hidden" name="x" value="" id="absciss"/>
 					<input type="hidden" name="y" value="" id="ordinat"/>
