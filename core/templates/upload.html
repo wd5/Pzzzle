@@ -1,8 +1,0 @@
-    <form action="/upload" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="hidden" name="x" value="{{ x }}" />
-        <input type="hidden" name="y" value="{{ y }}" />
-        <input type="file" name="pic" />
-
-        <input type="submit" class="submit" value="Сохранить">
-    </form>
