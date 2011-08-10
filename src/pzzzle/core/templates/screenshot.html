@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div style="text-align: center; margin-bottom: 20px;">
+        Сохраните эту картинку, через некоторое время она может внезапно пропасть.<br><br>
+        <img width="1000px" src="{{ MEDIA_URL }}data/screenshot_{{ number }}.jpg" />
+    </div>
+
+{% endblock %}
